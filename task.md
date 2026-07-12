@@ -1,0 +1,25 @@
+# Tasks - TransitOps Implementation Checklist
+
+- `[x]` Install testing and service dependencies (backend & frontend)
+- `[x]` Implement Backend Extensions:
+  - `[x]` Add `safetyScore` to Driver model
+  - `[x]` Create Email Service (`email.service.ts`)
+  - `[x]` Create Upload Service (`upload.service.ts`)
+  - `[x]` Implement Vehicle Metrics endpoint in Controller & Routes
+  - `[x]` Generate Swagger OpenAPI spec & route handler
+  - `[x]` Generate Postman Collection
+- `[x]` Connect Frontend Pages to Real Backend APIs (Replace Mocks):
+  - `[x]` Dashboard KPI stats & analytics charts
+  - `[x]` Vehicles fleet list, register modal, delete action
+  - `[x]` Drivers list, register modal, status edit
+  - `[x]` Trips history, dispatch modal, complete/cancel actions
+  - `[x]` Maintenance log, schedule modal, resolve action
+  - `[x]` Fuel logs list, log refueling modal
+  - `[x]` Expenses ledger, submit expense claim modal, approve/reject actions
+  - `[x]` Notifications list, read status update, delete action
+  - `[x]` Profile details dynamic fetch
+  - `[x]` Add Settings page to routing & sidebar
+- `[x]` Create Testing Suites:
+  - `[x]` Backend tests (Auth, Business Rules, Vehicles, Drivers, Trips, Maintenance, Fuel, Expenses)
+  - `[x]` Frontend component test validation
+- `[x]` Compilation & End-to-End Verification

@@ -13,6 +13,7 @@ router.use(protect);
 
 // Read permissions
 router.get('/', authorize('Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'), vehicleController.getAll);
+router.get('/:id/metrics', authorize('Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'), validateMongoId, validateRequest, vehicleController.getVehicleMetrics);
 router.get('/:id', authorize('Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'), validateMongoId, validateRequest, vehicleController.getById);
 
 // Write permissions (Admin & Fleet Manager)

@@ -45,6 +45,20 @@ app.use('/health', (_req: Request, res: Response) => {
   });
 });
 
+// Serve API Swagger Doc
+import fs from 'fs';
+import path from 'path';
+app.use('/api-docs', (_req: Request, res: Response) => {
+  try {
+    const swaggerDoc = JSON.parse(
+      fs.readFileSync(path.join(__dirname, '../swagger.json'), 'utf8')
+    );
+    res.status(200).json(swaggerDoc);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load api specifications document.' });
+  }
+});
+
 // 4. API routes
 app.use('/api/v1', apiRouter);
 

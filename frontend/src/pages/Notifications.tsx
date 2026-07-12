@@ -1,42 +1,76 @@
-import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../context/ToastContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Check, X, ShieldAlert, AlertCircle, Wrench, Settings } from 'lucide-react';
+import { apiClient } from '../api/apiClient';
+import { formatDate } from '../lib/utils';
 
 interface NotificationItem {
-  id: string;
+  _id: string;
   title: string;
-  body: string;
-  time: string;
-  read: boolean;
+  message: string;
+  createdAt: string;
+  status: string;
   type: string;
 }
 
 export const Notifications = () => {
   const { addToast } = useToast();
-  const [notifications, setNotifications] = useState<NotificationItem[]>([
-    { id: '1', title: 'Speed Limit Trigger', body: 'Driver John Doe exceeded speed limit on Route 4 by 12mph.', time: '5 mins ago', read: false, type: 'safety' },
-    { id: '2', title: 'Inspection Request', body: 'Vehicle TX-9082 has a pending corrective maintenance window.', time: '1 hour ago', read: false, type: 'maintenance' },
-    { id: '3', title: 'System Configuration Sync', body: 'GPS tracking tokens successfully synchronized with core engine.', time: '2 hours ago', read: true, type: 'system' },
-  ]);
+  const queryClient = useQueryClient();
 
-  const handleMarkRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-    addToast('Marked as read', 'success');
-  };
+  // Fetch Notifications
+  const { data, isLoading } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: () => apiClient.get('/notifications?limit=50').then((res) => res.data.data),
+  });
 
-  const handleDelete = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-    addToast('Notification removed', 'info');
-  };
+  // Mark single as read Mutation
+  const markReadMutation = useMutation({
+    mutationFn: (id: string) => apiClient.patch(`/notifications/${id}/read`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['recentNotifications'] });
+      addToast('Notification marked as read', 'success');
+    },
+    onError: (err: any) => {
+      addToast(err.response?.data?.message || 'Failed to update notification', 'error');
+    },
+  });
+
+  // Mark all as read Mutation
+  const markAllReadMutation = useMutation({
+    mutationFn: () => apiClient.post('/notifications/read-all'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['recentNotifications'] });
+      addToast('All notifications marked as read', 'success');
+    },
+    onError: (err: any) => {
+      addToast(err.response?.data?.message || 'Failed to update notifications', 'error');
+    },
+  });
+
+  // Delete notification Mutation
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => apiClient.delete(`/notifications/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['recentNotifications'] });
+      addToast('Notification removed from logs', 'info');
+    },
+    onError: (err: any) => {
+      addToast(err.response?.data?.message || 'Failed to delete notification', 'error');
+    },
+  });
 
   const icons: { [key: string]: any } = {
-    safety: <ShieldAlert className="w-5 h-5 text-rose-500" />,
-    maintenance: <Wrench className="w-5 h-5 text-amber-500" />,
-    system: <Settings className="w-5 h-5 text-blue-500" />,
+    Safety: <ShieldAlert className="w-5 h-5 text-rose-500" />,
+    Maintenance: <Wrench className="w-5 h-5 text-amber-500" />,
+    System: <Settings className="w-5 h-5 text-blue-500" />,
+    Alert: <ShieldAlert className="w-5 h-5 text-red-500" />,
   };
+
+  const notificationList = data?.data || [];
 
   return (
     <motion.div
@@ -44,64 +78,84 @@ export const Notifications = () => {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col gap-6 max-w-4xl"
     >
-      <div>
-        <h1 className="text-2xl font-bold text-slate-955 dark:text-white">Notifications Dashboard</h1>
-        <p className="text-sm text-slate-500 mt-1">Review active compliance flags, speed notifications, and maintenance schedules</p>
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <AnimatePresence>
-          {notifications.map((n) => (
-            <motion.div
-              key={n.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className={`p-4 rounded-xl border flex items-start gap-4 transition-all bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 ${
-                !n.read ? 'ring-1 ring-indigo-500/30' : ''
-              }`}
-            >
-              <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-850 flex-shrink-0 mt-0.5">
-                {icons[n.type] || <Bell className="w-5 h-5 text-indigo-500" />}
-              </div>
-
-              <div className="flex-grow">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{n.title}</h3>
-                  <span className="text-[10px] text-slate-400">{n.time}</span>
-                </div>
-                <p className="text-xs text-slate-650 dark:text-slate-350 mt-1.5 leading-relaxed">{n.body}</p>
-              </div>
-
-              <div className="flex items-center gap-1 flex-shrink-0">
-                {!n.read && (
-                  <button
-                    onClick={() => handleMarkRead(n.id)}
-                    className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-emerald-600 transition-colors"
-                    title="Mark Read"
-                  >
-                    <Check className="w-4 h-4" />
-                  </button>
-                )}
-                <button
-                  onClick={() => handleDelete(n.id)}
-                  className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"
-                  title="Remove"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {notifications.length === 0 && (
-          <div className="py-12 text-center text-slate-400">
-            <AlertCircle className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-            No new alerts or notifications.
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-955 dark:text-white">Notifications Dashboard</h1>
+          <p className="text-sm text-slate-500 mt-1">Review active compliance flags, speed notifications, and maintenance schedules</p>
+        </div>
+        {notificationList.some((n: NotificationItem) => n.status === 'Unread') && (
+          <button
+            onClick={() => markAllReadMutation.mutate()}
+            disabled={markAllReadMutation.isPending}
+            className="px-4 py-2 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-350 text-xs font-semibold"
+          >
+            Mark All Read
+          </button>
         )}
       </div>
+
+      {isLoading ? (
+        <div className="py-12 text-center text-xs text-slate-400 gap-2 flex justify-center items-center">
+          <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+          <span>Loading alerts...</span>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          <AnimatePresence>
+            {notificationList.map((n: NotificationItem) => (
+              <motion.div
+                key={n._id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className={`p-4 rounded-xl border flex items-start gap-4 transition-all bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 ${
+                  n.status === 'Unread' ? 'ring-1 ring-indigo-500/30' : ''
+                }`}
+              >
+                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-850 flex-shrink-0 mt-0.5">
+                  {icons[n.type] || <Bell className="w-5 h-5 text-indigo-500" />}
+                </div>
+
+                <div className="flex-grow">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{n.title}</h3>
+                    <span className="text-[10px] text-slate-400">{formatDate(n.createdAt)}</span>
+                  </div>
+                  <p className="text-xs text-slate-650 dark:text-slate-350 mt-1.5 leading-relaxed">{n.message}</p>
+                </div>
+
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  {n.status === 'Unread' && (
+                    <button
+                      onClick={() => markReadMutation.mutate(n._id)}
+                      disabled={markReadMutation.isPending}
+                      className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-emerald-600 transition-colors"
+                      title="Mark Read"
+                    >
+                      <Check className="w-4 h-4" />
+                    </button>
+                  )}
+                  <button
+                    onClick={() => deleteMutation.mutate(n._id)}
+                    disabled={deleteMutation.isPending}
+                    className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-600 transition-colors"
+                    title="Remove"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {notificationList.length === 0 && (
+            <div className="py-12 text-center text-slate-400 bg-white dark:bg-slate-900 border rounded-xl">
+              <AlertCircle className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+              No new alerts or notifications.
+            </div>
+          )}
+        </div>
+      )}
     </motion.div>
   );
 };

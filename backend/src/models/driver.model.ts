@@ -23,6 +23,7 @@ export interface IDriver extends Document, SoftDeleteDocument {
   licenseType: LicenseType;
   licenseExpiry: Date;
   status: DriverStatus;
+  safetyScore: number;
   phone: string;
   emergencyContact: {
     name: string;
@@ -64,6 +65,12 @@ const DriverSchema = new Schema<IDriver>(
       enum: Object.values(DriverStatus),
       default: DriverStatus.ACTIVE,
       index: true,
+    },
+    safetyScore: {
+      type: Number,
+      default: 100,
+      min: [0, 'Safety score cannot be less than 0'],
+      max: [100, 'Safety score cannot exceed 100'],
     },
     phone: {
       type: String,

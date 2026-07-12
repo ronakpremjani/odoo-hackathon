@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: transitops_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - transitops_network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: transitops_api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/transitops
+      - JWT_SECRET=super_secret_jwt_access_token_key_12345
+      - JWT_REFRESH_SECRET=super_secret_jwt_refresh_token_key_12345
+      - JWT_ACCESS_EXPIRATION=15m
+      - JWT_REFRESH_EXPIRATION=7d
+      - CORS_ORIGIN=http://localhost:3000
+    depends_on:
+      - mongodb
+    networks:
+      - transitops_network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: transitops_client
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - backend
+    networks:
+      - transitops_network
+
+volumes:
+  mongo_data:
+
+networks:
+  transitops_network:
+    driver: bridge

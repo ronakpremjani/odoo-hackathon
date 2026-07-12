@@ -11,6 +11,7 @@ import {
   BarChart3,
   Bell,
   User,
+  Settings,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -82,6 +83,12 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       name: 'Profile',
       to: '/profile',
       icon: <User className="w-5 h-5" />,
+      roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
+    },
+    {
+      name: 'Settings',
+      to: '/settings',
+      icon: <Settings className="w-5 h-5" />,
       roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
     },
   ];

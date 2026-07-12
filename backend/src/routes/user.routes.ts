@@ -12,14 +12,13 @@ import { authorize } from '../middleware/rbac';
 const router = Router();
 const userController = new UserController();
 
-// All user routes are protected and restricted to Admin
+// All user routes are protected
 router.use(protect);
-router.use(authorize('Admin'));
 
-router.get('/', userController.getAll);
-router.get('/:id', validateMongoId, validateRequest, userController.getById);
-router.post('/', createUserValidator, validateRequest, userController.create);
-router.put('/:id', validateMongoId, updateUserValidator, validateRequest, userController.update);
-router.delete('/:id', validateMongoId, validateRequest, userController.delete);
+router.get('/', authorize('Admin', 'Fleet Manager'), userController.getAll);
+router.get('/:id', authorize('Admin', 'Fleet Manager'), validateMongoId, validateRequest, userController.getById);
+router.post('/', authorize('Admin'), createUserValidator, validateRequest, userController.create);
+router.put('/:id', authorize('Admin'), validateMongoId, updateUserValidator, validateRequest, userController.update);
+router.delete('/:id', authorize('Admin'), validateMongoId, validateRequest, userController.delete);
 
 export default router;
