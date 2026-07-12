@@ -24,8 +24,23 @@ export const registerValidator = [
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
-  body('role')
-    .optional()
-    .isIn(['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'])
-    .withMessage('Invalid system role specified')
+  body('roleId')
+    .isMongoId()
+    .withMessage('Must be a valid Role ObjectId')
+];
+
+export const forgotPasswordValidator = [
+  body('email')
+    .isEmail()
+    .withMessage('Must be a valid email address')
+    .normalizeEmail()
+];
+
+export const resetPasswordValidator = [
+  body('token')
+    .notEmpty()
+    .withMessage('Reset token is required'),
+  body('newPassword')
+    .isLength({ min: 6 })
+    .withMessage('New password must be at least 6 characters long')
 ];

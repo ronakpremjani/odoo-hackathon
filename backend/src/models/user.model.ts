@@ -1,8 +1,22 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { UserRole } from '../constants/roles';
+import { softDeletePlugin, SoftDeleteDocument } from '../plugins/softDelete.plugin';
 
-const UserSchema = new Schema(
+export interface IUser extends Document, SoftDeleteDocument {
+  name: string;
+  email: string;
+  password?: string;
+  role: Schema.Types.ObjectId;
+  isActive: boolean;
+  refreshToken?: string;
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  comparePassword(passwordAttempt: string): Promise<boolean>;
+}
+
+const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -15,6 +29,7 @@ const UserSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address'],
     },
     password: {
       type: String,
@@ -23,9 +38,9 @@ const UserSchema = new Schema(
       select: false, // Don't return password in queries by default
     },
     role: {
-      type: String,
-      enum: Object.values(UserRole),
-      default: UserRole.FLEET_MANAGER,
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+      required: [true, 'Role is required'],
     },
     isActive: {
       type: Boolean,
@@ -35,11 +50,22 @@ const UserSchema = new Schema(
       type: String,
       select: false,
     },
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
+    passwordResetExpires: {
+      type: Date,
+      select: false,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+// Apply soft delete plugin
+UserSchema.plugin(softDeletePlugin);
 
 // Hash password before saving
 UserSchema.pre('save', async function (next) {
@@ -47,7 +73,7 @@ UserSchema.pre('save', async function (next) {
   
   try {
     const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    this.password = await bcrypt.hash(this.password!, salt);
     next();
   } catch (err) {
     next(err as Error);
@@ -56,7 +82,8 @@ UserSchema.pre('save', async function (next) {
 
 // Compare password method
 UserSchema.methods.comparePassword = async function (passwordAttempt: string): Promise<boolean> {
+  if (!this.password) return false;
   return bcrypt.compare(passwordAttempt, this.password);
 };
 
-export const User = model('User', UserSchema);
+export const User = model<IUser>('User', UserSchema);

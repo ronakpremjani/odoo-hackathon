@@ -1,8 +1,7 @@
-import { Document } from 'mongoose';
 import { BaseRepository } from '../repositories/base.repository';
 import { AppError } from '../utils/appError';
 
-export class BaseService<T extends Document> {
+export class BaseService<T> {
   protected readonly repository: BaseRepository<T>;
   protected readonly resourceName: string;
 

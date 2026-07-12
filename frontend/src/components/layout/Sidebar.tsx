@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -6,9 +5,12 @@ import {
   Truck,
   Users,
   Map,
-  ShieldAlert,
+  Wrench,
+  Fuel,
   DollarSign,
-  Settings,
+  BarChart3,
+  Bell,
+  User,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -18,7 +20,7 @@ interface SidebarProps {
   setIsCollapsed: (collapsed: boolean) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
+export const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   const { user } = useAuth();
 
   const navigationItems = [
@@ -29,40 +31,58 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed })
       roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
     },
     {
-      name: 'Fleet Operations',
-      to: '/fleet',
+      name: 'Vehicles',
+      to: '/vehicles',
       icon: <Truck className="w-5 h-5" />,
-      roles: ['Admin', 'Fleet Manager'],
+      roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
     },
     {
-      name: 'Driver Profiles',
+      name: 'Drivers',
       to: '/drivers',
       icon: <Users className="w-5 h-5" />,
       roles: ['Admin', 'Fleet Manager', 'Safety Officer'],
     },
     {
-      name: 'Route Dispatch',
-      to: '/routes',
+      name: 'Trips',
+      to: '/trips',
       icon: <Map className="w-5 h-5" />,
-      roles: ['Admin', 'Fleet Manager'],
+      roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
     },
     {
-      name: 'Safety & Incidents',
-      to: '/safety',
-      icon: <ShieldAlert className="w-5 h-5" />,
-      roles: ['Admin', 'Safety Officer'],
+      name: 'Maintenance',
+      to: '/maintenance',
+      icon: <Wrench className="w-5 h-5" />,
+      roles: ['Admin', 'Fleet Manager', 'Safety Officer'],
     },
     {
-      name: 'Finance & Expenses',
-      to: '/finance',
+      name: 'Fuel Logs',
+      to: '/fuel',
+      icon: <Fuel className="w-5 h-5" />,
+      roles: ['Admin', 'Fleet Manager', 'Financial Analyst'],
+    },
+    {
+      name: 'Expenses',
+      to: '/expenses',
       icon: <DollarSign className="w-5 h-5" />,
       roles: ['Admin', 'Financial Analyst'],
     },
     {
-      name: 'System Config',
-      to: '/settings',
-      icon: <Settings className="w-5 h-5" />,
-      roles: ['Admin'],
+      name: 'Reports',
+      to: '/reports',
+      icon: <BarChart3 className="w-5 h-5" />,
+      roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
+    },
+    {
+      name: 'Notifications',
+      to: '/notifications',
+      icon: <Bell className="w-5 h-5" />,
+      roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
+    },
+    {
+      name: 'Profile',
+      to: '/profile',
+      icon: <User className="w-5 h-5" />,
+      roles: ['Admin', 'Fleet Manager', 'Safety Officer', 'Financial Analyst'],
     },
   ];
 

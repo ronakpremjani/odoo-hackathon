@@ -1,9 +1,7 @@
-import { UserRole } from '../constants/roles';
-
 export interface JwtPayload {
   id: string;
   email: string;
-  role: UserRole;
+  role: string;
 }
 
 declare global {

@@ -3,12 +3,15 @@ import { AuthLayout } from '../layouts/AuthLayout';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Login } from '../pages/Login';
 import { Dashboard } from '../pages/Dashboard';
-import { Fleet } from '../pages/Fleet';
+import { Vehicles } from '../pages/Vehicles';
 import { Drivers } from '../pages/Drivers';
-import { Routes } from '../pages/Routes';
-import { Safety } from '../pages/Safety';
-import { Finance } from '../pages/Finance';
-import { Settings } from '../pages/Settings';
+import { Trips } from '../pages/Trips';
+import { Maintenance } from '../pages/Maintenance';
+import { Fuel } from '../pages/Fuel';
+import { Expenses } from '../pages/Expenses';
+import { Reports } from '../pages/Reports';
+import { Notifications } from '../pages/Notifications';
+import { Profile } from '../pages/Profile';
 
 export const routes: RouteObject[] = [
   {
@@ -24,12 +27,15 @@ export const routes: RouteObject[] = [
     element: <DashboardLayout />,
     children: [
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'fleet', element: <Fleet /> },
+      { path: 'vehicles', element: <Vehicles /> },
       { path: 'drivers', element: <Drivers /> },
-      { path: 'routes', element: <Routes /> },
-      { path: 'safety', element: <Safety /> },
-      { path: 'finance', element: <Finance /> },
-      { path: 'settings', element: <Settings /> },
+      { path: 'trips', element: <Trips /> },
+      { path: 'maintenance', element: <Maintenance /> },
+      { path: 'fuel', element: <Fuel /> },
+      { path: 'expenses', element: <Expenses /> },
+      { path: 'reports', element: <Reports /> },
+      { path: 'notifications', element: <Notifications /> },
+      { path: 'profile', element: <Profile /> },
     ],
   },
   {
