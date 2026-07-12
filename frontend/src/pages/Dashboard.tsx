@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -23,8 +22,7 @@ import {
   Navigation,
   Percent,
   Bell,
-  DollarSign,
-  FileText
+  DollarSign
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
