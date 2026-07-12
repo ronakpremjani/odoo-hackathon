@@ -27,7 +27,7 @@ const processQueue = (error: any, token: string | null = null) => {
 // Request Interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -65,7 +65,7 @@ apiClient.interceptors.response.use(
         );
         const { token } = response.data.data;
 
-        localStorage.setItem('token', token);
+        localStorage.setItem('accessToken', token);
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         originalRequest.headers.Authorization = `Bearer ${token}`;
 
@@ -76,7 +76,7 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         isRefreshing = false;
-        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
         window.dispatchEvent(new Event('auth:logout'));
         return Promise.reject(refreshError);
       }

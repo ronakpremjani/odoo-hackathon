@@ -82,8 +82,8 @@ export class TripService extends BaseService<ITrip> {
       if (finalOdometer === undefined || finalOdometer === null) {
         throw AppError.badRequest('End odometer reading is required to complete a trip');
       }
-      if (finalOdometer < existingTrip.startOdometer) {
-        throw AppError.badRequest(`End odometer (${finalOdometer}) cannot be less than start odometer (${existingTrip.startOdometer})`);
+      if (finalOdometer < (existingTrip.startOdometer || 0)) {
+        throw AppError.badRequest(`End odometer (${finalOdometer}) cannot be less than start odometer (${existingTrip.startOdometer || 0})`);
       }
     }
 

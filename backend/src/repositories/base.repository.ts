@@ -40,7 +40,7 @@ export class BaseRepository<T> {
     const limit = options.limit || 10;
     const skip = (page - 1) * limit;
 
-    let query: any = this.model.find(filter).skip(skip).limit(limit);
+    let query: any = this.model.find(filter).skip(skip).limit(limit).lean();
 
     if (options.sort) query = query.sort(options.sort);
     if (options.select) query = query.select(options.select);

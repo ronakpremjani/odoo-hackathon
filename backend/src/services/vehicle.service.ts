@@ -54,7 +54,7 @@ export class VehicleService extends BaseService<IVehicle> {
 
     return {
       vehicle: {
-        id: vehicle.id,
+        id: (vehicle as any)._id.toString(),
         plateNumber: vehicle.plateNumber,
         model: vehicle.model,
         status: vehicle.status,
