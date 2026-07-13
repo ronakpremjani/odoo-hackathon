@@ -9,6 +9,12 @@ interface AuthContextType extends AuthState {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const normalizeUser = (user: any) => {
+  if (!user) return user;
+  const roleName = typeof user.role === 'string' ? user.role : user.role?.name;
+  return { ...user, role: roleName || 'Driver' };
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<AuthState>({
     user: null,
@@ -27,15 +33,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       try {
-        // Fetch current user details or profile
-        // Since we only have mock endpoints, we'll request a refresh or simulate it
-        const response = await apiClient.post('/auth/refresh');
-        const { token: newToken, user } = response.data.data;
+        const response = await apiClient.get('/auth/profile');
+        const user = normalizeUser(response.data.data);
 
-        localStorage.setItem('accessToken', newToken);
         setState({
           user,
-          token: newToken,
+          token,
           isAuthenticated: true,
           isLoading: false,
         });
@@ -72,12 +75,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setState((prev) => ({ ...prev, isLoading: true }));
     try {
       const response = await apiClient.post('/auth/login', { email, password });
-      const { token, user } = response.data.data;
-      
-      localStorage.setItem('accessToken', token);
+      const { token, tokens, user: rawUser } = response.data.data;
+      const accessToken = token || tokens?.accessToken;
+      const user = normalizeUser(rawUser);
+
+      localStorage.setItem('accessToken', accessToken);
       setState({
         user,
-        token,
+        token: accessToken,
         isAuthenticated: true,
         isLoading: false,
       });

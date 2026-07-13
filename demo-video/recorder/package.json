@@ -1,0 +1,15 @@
+{
+  "name": "transitops-demo-recorder",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "node seed-demo.mjs",
+    "record": "node record-demo.mjs",
+    "compose": "node compose-video.mjs",
+    "build": "npm run seed && npm run record && npm run compose"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "playwright": "^1.51.0"
+  }
+}

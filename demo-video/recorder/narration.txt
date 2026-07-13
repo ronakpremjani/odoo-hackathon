@@ -1,0 +1,17 @@
+TransitOps. Fleet operations, finally under control.
+
+Every day, transport companies lose hours to spreadsheets and phone calls. The same vehicle gets booked twice. A suspended driver ends up on a live route. Maintenance slips through the cracks. Fuel costs pile up with no clear picture of return on investment.
+
+TransitOps is a transport operations ERP built to replace that fragmentation. One platform for fleet, drivers, dispatches, maintenance, fuel, and financial oversight.
+
+Sign in with secure JWT authentication. Each user sees only what their role allows.
+
+Welcome to TransitOps Core, your fleet operations and ROI intelligence control center. Four KPI cards update in real time from server-side aggregations. Fleet utilization. Operational cost. Estimated revenue at two dollars fifty per mile. Return on investment.
+
+Register vehicles, manage operators with license validation and safety scores, dispatch trips with automatic status transitions, schedule maintenance, log fuel and expenses, and review live analytics.
+
+When someone breaks the rules, the system stops them. Vehicle already on trip. Driver suspended. License expired. Cargo over capacity. Vehicle in maintenance. Clear errors. No silent failures.
+
+Built with React, Express, MongoDB, and role-based access control. Clean architecture with services, repositories, and enforced business rules.
+
+TransitOps replaces spreadsheet chaos with enforced workflows and live financial intelligence. One platform. One source of truth. Built for teams that move the world. Thank you, Odoo Hackathon judges.

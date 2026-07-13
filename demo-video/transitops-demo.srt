@@ -1,0 +1,191 @@
+1
+00:00:00,000 --> 00:00:05,000
+TransitOps. Fleet operations, finally under control.
+
+2
+00:00:05,000 --> 00:00:10,500
+Every day, transport companies lose hours to spreadsheets and phone calls.
+
+3
+00:00:10,500 --> 00:00:16,000
+The same vehicle gets booked twice. A suspended driver ends up on a live route.
+
+4
+00:00:16,000 --> 00:00:21,500
+Maintenance slips through the cracks. Fuel costs pile up with no clear picture of ROI.
+
+5
+00:00:21,500 --> 00:00:27,000
+Managers guess at utilization. Finance chases receipts. Safety teams react instead of prevent.
+
+6
+00:00:27,000 --> 00:00:32,500
+TransitOps is a transport operations ERP built to replace that fragmentation.
+
+7
+00:00:32,500 --> 00:00:38,000
+One platform for fleet, drivers, dispatches, maintenance, fuel, and financial oversight.
+
+8
+00:00:38,000 --> 00:00:43,500
+Sign in with secure JWT authentication. Each user sees only what their role allows.
+
+9
+00:00:43,500 --> 00:00:49,000
+Admin. Fleet Manager. Safety Officer. Financial Analyst. Driver.
+
+10
+00:00:49,000 --> 00:00:54,500
+Route guards on the frontend. Role checks on every API endpoint on the backend.
+
+11
+00:00:54,500 --> 00:01:00,000
+Welcome to TransitOps Core — your fleet operations and ROI intelligence control center.
+
+12
+00:01:00,000 --> 00:01:05,500
+Four KPI cards update in real time from server-side aggregations.
+
+13
+00:01:05,500 --> 00:01:11,000
+Fleet Utilization — what percentage of your active fleet is en route right now.
+
+14
+00:01:11,000 --> 00:01:16,500
+Operational Cost — fuel, maintenance, and approved expenses combined.
+
+15
+00:01:16,500 --> 00:01:22,000
+Estimated Revenue — calculated at two dollars fifty per mile of completed trips.
+
+16
+00:01:22,000 --> 00:01:27,500
+Return on Investment — the efficiency of every asset in your fleet.
+
+17
+00:01:27,500 --> 00:01:33,000
+Below that, live charts: monthly fuel expense trends, maintenance cost by type,
+
+18
+00:01:33,000 --> 00:01:38,500
+and a fleet status pie chart showing Active, On Trip, and In Maintenance allocation.
+
+19
+00:01:38,500 --> 00:01:44,000
+The sidebar shows your three most recent dispatches and compliance alerts from the notification system.
+
+20
+00:01:44,000 --> 00:01:49,500
+In the Vehicles module, register a new asset with plate number, make, model, and payload capacity.
+
+21
+00:01:49,500 --> 00:01:55,000
+Search by plate. Filter by status. Duplicate registrations are blocked at the database level.
+
+22
+00:01:55,000 --> 00:02:00,500
+Inspect any vehicle to view per-asset metrics — fuel cost, maintenance spend, distance driven, and ROI.
+
+23
+00:02:00,500 --> 00:02:06,000
+In the Operator Registry, link a driver to a system user account and record license details.
+
+24
+00:02:06,000 --> 00:02:11,500
+License expiry is validated at dispatch time. Safety scores display on every profile.
+
+25
+00:02:11,500 --> 00:02:17,000
+Now the core workflow — dispatch a trip from the Trips module.
+
+26
+00:02:17,000 --> 00:02:22,500
+Select an Active vehicle. Assign an Active operator. Enter origin, destination, and cargo weight.
+
+27
+00:02:22,500 --> 00:02:28,000
+The UI warns you if cargo exceeds payload. The server enforces it before anything is saved.
+
+28
+00:02:28,000 --> 00:02:33,500
+On successful dispatch, vehicle and driver status automatically transition to On Trip.
+
+29
+00:02:33,500 --> 00:02:39,000
+Complete the trip with an end odometer reading. Both return to Active. Vehicle mileage syncs instantly.
+
+30
+00:02:39,000 --> 00:02:44,500
+Schedule maintenance and the vehicle is removed from dispatch — status moves to In Maintenance.
+
+31
+00:02:44,500 --> 00:02:50,000
+Resolve the work order with cost and mechanic details. The vehicle is available again.
+
+32
+00:02:50,000 --> 00:02:55,500
+Log fuel entries with quantity, cost, and odometer. Record expense claims by category.
+
+33
+00:02:55,500 --> 00:03:01,000
+Approve pending expenses. Dashboard KPIs refresh automatically — no manual spreadsheet updates.
+
+34
+00:03:01,000 --> 00:03:06,500
+Analytics on the dashboard show fuel trends, maintenance breakdown, and fleet allocation over six months.
+
+35
+00:03:06,500 --> 00:03:12,000
+Per-vehicle metrics deliver fuel efficiency and ROI for individual assets.
+
+36
+00:03:12,000 --> 00:03:17,500
+Now — what happens when someone tries to break the rules?
+
+37
+00:03:17,500 --> 00:03:23,000
+Dispatch a vehicle already on trip — rejected. Assign a suspended driver — blocked.
+
+38
+00:03:23,000 --> 00:03:28,500
+Use a driver with an expired license — stopped. Exceed cargo capacity — denied.
+
+39
+00:03:28,500 --> 00:03:34,000
+Try to dispatch a vehicle in maintenance — the system says no. Every failure returns a clear message.
+
+40
+00:03:34,000 --> 00:03:39,500
+These rules live in the service layer — not in the UI — so they cannot be bypassed.
+
+41
+00:03:39,500 --> 00:03:45,000
+The architecture: React nineteen with Vite and TypeScript on the frontend.
+
+42
+00:03:45,000 --> 00:03:50,500
+Express and MongoDB on the backend. JWT with refresh tokens. Role-based access control.
+
+43
+00:03:50,500 --> 00:03:56,000
+Clean separation — routes, controllers, services, repositories, and Mongoose models.
+
+44
+00:03:56,000 --> 00:04:01,500
+Input validation with express-validator and Zod. TanStack Query for server state. Recharts for analytics.
+
+45
+00:04:01,500 --> 00:04:07,000
+Docker Compose for one-command deployment. Integration tests cover the full dispatch lifecycle.
+
+46
+00:04:07,000 --> 00:04:12,500
+TransitOps replaces spreadsheet chaos with enforced workflows and live financial intelligence.
+
+47
+00:04:12,500 --> 00:04:18,000
+One platform. One source of truth. Built for teams that move the world.
+
+48
+00:04:18,000 --> 00:04:22,000
+Thank you, Odoo Hackathon judges. We are TransitOps.

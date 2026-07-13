@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TransitOps</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 20%, #312e81 0%, #0f172a 45%, #020617 100%);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: white;
+    }
+    .card { text-align: center; animation: fadeUp 1.2s ease-out; }
+    .logo {
+      width: 96px; height: 96px; border-radius: 20px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 2rem; margin: 0 auto 28px;
+      box-shadow: 0 20px 60px rgba(79, 70, 229, 0.45);
+    }
+    h1 {
+      font-size: 3.5rem; letter-spacing: 0.08em; font-weight: 800;
+      background: linear-gradient(90deg, #a5b4fc, #6366f1, #818cf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .team { margin-top: 16px; font-size: 1.1rem; color: #94a3b8; }
+    .tagline { margin-top: 24px; font-size: 1.35rem; color: #cbd5e1; font-weight: 500; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">TO</div>
+    <h1>TRANSITOPS</h1>
+    <p class="team">Odoo Hackathon 2026</p>
+    <p class="tagline">Fleet operations, finally under control.</p>
+  </div>
+</body>
+</html>
